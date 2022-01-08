@@ -18,6 +18,10 @@ section.react-trello-lane {
     
         textarea, a.sc-bdvvtL {
             color: #fff;
+
+            &:focus {
+                color: #000;
+            }
         }
     }
 }

@@ -26,7 +26,7 @@ const Home = () => {
         "Lane actions": "Phase actions",
         "button": {
           "Add lane": "Add Phase",
-          "Add card": "Add Phase",
+          "Add card": "Add Action",
           "Cancel": "Cancel"
         },
         "placeholder": {
