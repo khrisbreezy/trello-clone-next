@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var SAVE_PHASE_DATA = 'SAVE_PHASE_DATA';\nexport var savePhaseData = function savePhaseData(data) {\n  return {\n    type: SAVE_PHASE_DATA,\n    data: data\n  };\n};","map":null,"metadata":{},"sourceType":"module"}

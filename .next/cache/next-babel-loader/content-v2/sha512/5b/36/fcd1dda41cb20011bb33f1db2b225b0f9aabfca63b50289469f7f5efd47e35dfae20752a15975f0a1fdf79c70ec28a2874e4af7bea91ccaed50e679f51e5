@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const convertObjectToArray = arr => {\n  return Object.keys(arr).map(key => {\n    return {\n      value: arr[key],\n      information: capitalize(key)\n    };\n  });\n};\n\nconst capitalize = word => {\n  return word.toLowerCase().replace(/\\w/, firstLetter => firstLetter.toUpperCase());\n};","map":null,"metadata":{},"sourceType":"module"}

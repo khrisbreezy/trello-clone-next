@@ -1,5 +1,6 @@
-.jlqSaW {
+.react-trello-board {
     background-color: #fff !important;
+    height: 80vh !important;
 }
 
 .sc-jrQzAO {
@@ -10,28 +11,32 @@
     padding: 0 0 10px 0;
 }
 
-header.hXiTVc {
-    background: linear-gradient(to right, #007DA5, rgba(0, 125, 165, 0.5));
-    padding: 10px 10px 5px 10px;
-
-    textarea, a.sc-bdvvtL {
-        color: #fff;
+section.react-trello-lane {
+    & > header.sc-gKclnd {
+        background: linear-gradient(to right, #007DA5, rgba(0, 125, 165, 0.5));
+        padding: 10px 10px 5px 10px;
+    
+        textarea, a.sc-bdvvtL {
+            color: #fff;
+        }
     }
 }
+
+
 
 .cFQZim {
     top: 13px;
 }
 
-.iUtzBU:hover {
+.sc-bYoBSM:hover {
     background-color: #007DA5 !important;
 }
 
-.fWNZIz, .hAgCqU {
+.sc-hGPBjI, .sc-jcFjpl {
     background-color: #007DA5 !important;
 }
 
-.kBFNfs:focus {
+.sc-bBHxTw:focus {
     color: #000;
 }
 
@@ -39,6 +44,10 @@ header.hXiTVc {
     word-break: break-all;
     overflow: hidden;
     overflow-wrap: break-word;
+}
+
+.sc-jrQzAO {
+    max-height: 70vh !important;
 }
 
 

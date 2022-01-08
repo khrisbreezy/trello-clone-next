@@ -1,0 +1,1 @@
+{"ast":null,"code":"export const SAVE_PHASE_DATA = 'SAVE_PHASE_DATA';\nexport const savePhaseData = data => ({\n  type: SAVE_PHASE_DATA,\n  data\n});","map":null,"metadata":{},"sourceType":"module"}
