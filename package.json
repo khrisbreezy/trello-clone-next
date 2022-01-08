@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
+    "axios": "^0.21.1",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.1",
     "jquery": "^3.6.0",
@@ -23,6 +24,7 @@
     "react-trello": "^2.2.11",
     "redux": "^4.0.5",
     "redux-devtools-extension": "^2.13.9",
+    "react-notifications": "^1.7.2",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "sass": "^1.32.8",

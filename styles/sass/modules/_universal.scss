@@ -54,4 +54,23 @@ section.react-trello-lane {
     max-height: 70vh !important;
 }
 
+.error {
+    font-size: 1.3rem;
+    color: red;
+    text-align: left;
+}
+
+form.auth-form {
+    input {
+        outline: none;
+        border: 1px solid #007DA5;
+        padding: 5px;
+        border-radius: 5px;
+    }
+}
+
+.cursor {
+    cursor: pointer;
+}
+
 

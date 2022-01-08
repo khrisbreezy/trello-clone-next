@@ -10,6 +10,7 @@ import {PersistGate} from "redux-persist/integration/react";
 import phaseData from "../store/reducers/phaseStore";
 
 import '../styles/sass/main.scss';
+import AuthModal from "../components/AuthModal";
 
 
 
@@ -35,6 +36,7 @@ export default class extends App {
         return <Provider store={store}>
                 <PersistGate persistor={persistor} loading={null}>
                     <Component {...pageProps} />
+                    <AuthModal />
                 </PersistGate>
         </Provider>
     }

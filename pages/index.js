@@ -67,6 +67,8 @@ const Home = () => {
     };
 
     const exportDataHandler = async () => {
+        $('#authModal').modal('show');
+        return;
         let dataToExport = [];
         phaseData.forEach(phase => {
             phase.cards.forEach(card => {
@@ -102,7 +104,7 @@ const Home = () => {
                     /> 
                 </div>
 
-                <div className="row mb-5 text-center">
+                <div className="row text-center">
                     <div className="col-md-6 mb-4">
                         <button onClick={gotoProcessBginfoHandler} className="btn">Add process background</button>
                     </div>
