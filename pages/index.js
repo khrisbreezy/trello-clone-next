@@ -103,10 +103,10 @@ const Home = () => {
                 </div>
 
                 <div className="row mb-5 text-center">
-                    <div className="col-md-6">
+                    <div className="col-md-6 mb-4">
                         <button onClick={gotoProcessBginfoHandler} className="btn">Add process background</button>
                     </div>
-                    <div className="col-md-6">
+                    <div className="col-md-6 mb-4">
                         <CSVLink className='d-none' ref={btnRef} {...csvReport}>Export</CSVLink>
                         <button onClick={exportDataHandler} className="btn">Export to data frame</button>
                     </div>         
