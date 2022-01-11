@@ -19,6 +19,10 @@ section {
     }
 
     &.process-bg {
+        @media only screen and (max-width: $mobile_width) {
+           margin-bottom: 50px;
+        }
+
         .thead {
             background-color: #024157;
             color: #fff;
