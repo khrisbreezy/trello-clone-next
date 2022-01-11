@@ -1,14 +1,49 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 import Error from '../components/Error';
+import axiosInstance from '../config/axios';
+import { loginAsync, storeAuth } from '../store/actions/auth';
 
 const AuthModal = () => {
-    const { handleSubmit, errors, register } = useForm();
+    const { handleSubmit, errors, register, reset } = useForm();
     const [ loading, setLoading ] = useState(false);
-    const [ formState, setFormState ] = useState('signUp')
+    const [ formState, setFormState ] = useState('login');
 
-    const signUpHandler = () => {
+    const dispatch = useDispatch();
+
+    const signUpHandler = async (data) => {
+        setLoading(true);
+        let newData = data;
+        try {
+            const { data: response } = await axiosInstance.post('register', newData);
+            dispatch(storeAuth(response.data));
+            $('#authModal').modal('hide');
+            setLoading(false);
+        } catch(e) {
+            console.log('====================================');
+            console.log(e.response);
+            console.log('====================================');
+            setLoading(false);
+        }
+    };
+
+    const loginHandler = async (data) => {
+        setLoading(true);
+        try {
+            const loginResponse = await dispatch(loginAsync(data));
+            setLoading(false);
+            $('#authModal').modal('hide');
+            if (loginResponse === 'error') return;
+        } catch (error) {
+            console.log(error, 'error');
+            setLoading(false);
+        }
+        reset({});
+    };
+
+    const forgotPasswordHandler = () => {
 
     }
 
@@ -31,25 +66,25 @@ const AuthModal = () => {
                                 <div className="row">
                                     <div className="col-md-12">
                                         <div className="text-center">
-                                            <h2>Kindly sign up/login</h2>
+                                            <h2>{formState === 'login' ? 'Login' : `${formState === 'signUp' ? 'Signup' : 'Forgot Password' }`}</h2>
                                             {formState === 'signUp' && <form className='auth-form' onSubmit={handleSubmit(signUpHandler)}>
                                                 <div className="row">
                                                     <div className="col-md-6 mb-4">
                                                         <input type="text"
-                                                            name="firstName"
+                                                            name="first_name"
                                                             placeholder="First name"
                                                             className="w-100"
                                                             ref={register({ required: 'This field is required' })} />
                                                             
-                                                        {errors.firstName && <Error>{errors.firstName.message}</Error>}
+                                                        {errors.first_name && <Error>{errors.first_name.message}</Error>}
                                                     </div>
                                                     <div className="col-md-6 mb-4">
                                                         <input type="text"
-                                                            name="lastName"
+                                                            name="last_name"
                                                             placeholder="Last name"
                                                             className="w-100"
                                                             ref={register({ required: 'This field is required' })} />
-                                                        {errors.lastName && <Error>{errors.lastName.message}</Error>}
+                                                        {errors.last_name && <Error>{errors.last_name.message}</Error>}
                                                     </div>
                                                     <div className="col-md-6 mb-4">
                                                         <input type="email"
@@ -70,12 +105,12 @@ const AuthModal = () => {
                                                 </div>
 
                                                 <div className="text-center">
-                                                        <button disabled={loading} type="submit" className="btn">
+                                                        <button disabled={loading} type="submit" className="btn btn-login">
                                                             {!loading ? 'Submit' : 'Submitting...'}
                                                         </button>
                                                 </div>
                                             </form>}
-                                            {formState === 'login' && <form className='auth-form' onSubmit={handleSubmit(signUpHandler)}>
+                                            {formState === 'login' && <form className='auth-form' onSubmit={handleSubmit(loginHandler)}>
                                                 <div className="row">
                                                     <div className="col-12 mb-4">
                                                         <input type="email"
@@ -96,12 +131,12 @@ const AuthModal = () => {
                                                 </div>
 
                                                 <div className="text-center">
-                                                        <button disabled={loading} type="submit" className="btn">
+                                                        <button disabled={loading} type="submit" className="btn btn-login">
                                                             {!loading ? 'Submit' : 'Submitting...'}
                                                         </button>
                                                 </div>
                                             </form>}
-                                            {formState === 'forgot' && <form className='auth-form' onSubmit={handleSubmit(signUpHandler)}>
+                                            {formState === 'forgot' && <form className='auth-form' onSubmit={handleSubmit(forgotPasswordHandler)}>
                                                 <div className="row">
                                                     <div className="col-12 mb-4">
                                                         <input type="email"
@@ -114,16 +149,16 @@ const AuthModal = () => {
                                                 </div>
 
                                                 <div className="text-center">
-                                                        <button disabled={loading} type="submit" className="btn">
+                                                        <button disabled={loading} type="submit" className="btn btn-login">
                                                             {!loading ? 'Submit' : 'Submitting...'}
                                                         </button>
                                                 </div>
                                             </form>}
                                             <div className="d-flex align-items-center justify-content-between">
                                                 <p> {formState === 'signUp' ? 'Already signed up?' : `Haven't signup yet?`} 
-                                                    {formState === 'signUp' ? <span onClick={() => setFormState('login')} className='cursor'> Login</span> : <span onClick={() => setFormState('signUp')} className='cursor'> Signup</span> }
+                                                    {formState === 'signUp' ? <span onClick={() => setFormState('login')} className='cursor'>Login</span> : <span onClick={() => setFormState('signUp')} className='cursor'> Signup</span> }
                                                 </p>
-                                                <p onClick={() => setFormState('forgot')} className='cursor'>Forgot password?</p>
+                                                {/* <p onClick={() => setFormState('forgot')} className='cursor'>Forgot password?</p> */}
                                             </div>
                                         </div>
                                     </div>

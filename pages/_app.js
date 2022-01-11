@@ -4,23 +4,26 @@ import thunkMiddleware from "redux-thunk";
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import {composeWithDevTools} from "redux-devtools-extension";
 import storage from 'redux-persist/lib/storage';
+import {NotificationContainer} from 'react-notifications';
+
 
 import {persistReducer, persistStore} from 'redux-persist';
 import {PersistGate} from "redux-persist/integration/react";
 import phaseData from "../store/reducers/phaseStore";
-
-import '../styles/sass/main.scss';
+import auth from "../store/reducers/auth";
 import AuthModal from "../components/AuthModal";
 
-
+import '../styles/sass/main.scss';
+import 'react-notifications/lib/notifications.css';
 
 const persistConfig = {
     key: 'root',
     storage,
-    blacklist: ['']
+    blacklist: ['auth']
 }
 
 const reducers = combineReducers({
+    auth: auth,
     phaseData: persistReducer(persistConfig, phaseData)
 });
 
@@ -37,6 +40,7 @@ export default class extends App {
                 <PersistGate persistor={persistor} loading={null}>
                     <Component {...pageProps} />
                     <AuthModal />
+                    <NotificationContainer/>
                 </PersistGate>
         </Provider>
     }

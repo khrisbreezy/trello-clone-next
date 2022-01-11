@@ -4,8 +4,12 @@ import Board, { createTranslate } from 'react-trello';
 import Router from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { CSVLink } from 'react-csv';
+import {NotificationManager} from 'react-notifications';
+import Cookies from 'js-cookie';
 
 import { savePhaseData } from '../store/actions/phaseStore';
+import { logout } from '../store/actions/auth';
+import axiosInstance from '../config/axios';
 
 
 const Home = () => {
@@ -14,13 +18,17 @@ const Home = () => {
     const btnRef = useRef();
 
     const thePhaseData = useSelector(state => state.phaseData.phases);
+    const loggedIn = useSelector(state => state.auth.loggedIn);
+    let user = Cookies.get('user') || null;
+    user = typeof user === 'object' ? user : JSON.parse(user);
+    const token = Cookies.get('token');
 
     const [ mapName, setMapName ] = useState('Map Name');
     const [phaseData, setPhaseData] = useState(thePhaseData);
     const [csvData, setCsvData] = useState([]);
 
     const TEXTS = {
-        "Add another lane": "+ Add Phase",
+        "Add another lane": "+ Add Phase",  
         "Click to add card": "Add actions",
         "Delete lane": "Delete phase",
         "Lane actions": "Phase actions",
@@ -66,33 +74,77 @@ const Home = () => {
         Router.push('/process-background-information');
     };
 
-    const exportDataHandler = async () => {
-        $('#authModal').modal('show');
-        return;
-        let dataToExport = [];
-        phaseData.forEach(phase => {
-            phase.cards.forEach(card => {
-                dataToExport.push({
-                    'phase': phase.title,
+    const sendDataToDatase = async () => {
+        let phase = [];
+        data.lanes.map((lane => { 
+            phase.push({
+                'title': lane.title,
+                'card': lane.cards.map((card) => ({
                     'action': card.title,
-                    'responsible': card.description
-                });
-            })
-        });
+                    'responsibility': card.description
+                }))
+            });
+            
+            console.log({phase});
+        }))
+        try {
+            const { data } = await axiosInstance.post('processes', {
+                process_name: mapName, 
+                user_id: user.id,
+                phase: phase
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            console.log({data});
+            let dataToExport = [];
+            phaseData.forEach(phase => {
+                phase.cards.forEach(card => {
+                    dataToExport.push({
+                        'phase': phase.title,
+                        'action': card.title,
+                        'responsible': card.description
+                    });
+                })
+            });
 
-        await setCsvData(dataToExport);
-        btnRef.current.link.click();
-        dispatch(savePhaseData([]));
-        // setPhaseData([]);
+            await setCsvData(dataToExport);
+            btnRef.current.link.click();
+            dispatch(savePhaseData([]));
+        } catch(e) {
+            console.log(e);
+        }
     };
+
+    const exportDataHandler = async () => {
+        if (!loggedIn) {
+            $('#authModal').modal('show');
+            return;
+        }
+        await sendDataToDatase();
+    };
+
+    const loginHandler = () => {
+        $('#authModal').modal('show');
+    };
+
+    const loginOutHandler = () => {
+        dispatch(logout());
+        NotificationManager.success('Logout successfully', '', 5000);
+    }
   
 
     return (
         <section className='page_manager'>
             <div className="container-fluid">  
                 <div className="row">
-                    <div className="col-12 text-center">
-                        <input className='mapName_input' type="text" value={mapName} onChange={mapNameHandler} />
+                    <div className="col-12 text-center d-flex align-items-center justify-content-center">
+                        <input className='mapName_input mx-3' type="text" value={mapName} onChange={mapNameHandler} />
+                        {!loggedIn ? 
+                        <button onClick={loginHandler} className='btn btn-login'>Login</button>
+                        :
+                        <button onClick={loginOutHandler} className='btn btn-login'>Logout</button>}
                     </div>
                 </div>
 

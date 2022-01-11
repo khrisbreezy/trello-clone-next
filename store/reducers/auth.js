@@ -1,40 +1,32 @@
-import { LOGIN, LOGOUT, SYNCCOOKIES, STORE_ONLY_USER } from '../actions/auth';
+import { LOGIN, LOGOUT, SYNCCOOKIES } from '../actions/auth';
 
 import Cookies from 'js-cookie';
 
-// const token = Cookies.get('token'), user = Cookies.get('user'), userType = Cookies.get('userType');
+const token = Cookies.get('token'), user = Cookies.get('user');
 
 const initialState = {
-    loggedIn: null,
-    user: null,
-    token: null,
-    userType: null
+    loggedIn: !!token && !!user,
+    user: user || null,
+    token: token || token
 };
 
 const auth = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN:
-            const {user, token, user_type: userType} = action.data;
+            const {user, token} = action.data;
             return {
                 ...state,
                 user,
-                userType,
                 token,
                 loggedIn: true
             }
         case SYNCCOOKIES:
-            const {user: userData, token: userToken, user_type, loggedIn} = action.data;
+            const {user: userData, token: userToken, loggedIn} = action.data;
             return {
                 ...state,
                 user: userData,
-                userType: user_type,
                 token: userToken,
                 loggedIn
-            }
-        case STORE_ONLY_USER:
-            return {
-                ...state,
-                user: action.user,
             }
         case LOGOUT:
             return {

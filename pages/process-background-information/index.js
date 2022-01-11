@@ -1,11 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { useForm } from "react-hook-form";
 import { CSVLink } from 'react-csv';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { convertObjectToArray } from '../../helpers/convertObjectArray';
 
 const ProcessBackgroundInformation = () => {
+    const dispatch = useDispatch();
     const btnRef = useRef();
+
+    const loggedIn = useSelector(state => state.auth.loggedIn);
 
     const [ csvData, setCsvData ] = useState([]);
 
@@ -23,10 +27,13 @@ const ProcessBackgroundInformation = () => {
     };
 
     const exportBackgroundInformation = async (data) => {
+        if (!loggedIn) {
+            $('#authModal').modal('show');
+            return;
+        }
         const array = convertObjectToArray(data)
         await setCsvData(array);
         btnRef.current.link.click();
-        console.log({array});
     };
 
     return (
