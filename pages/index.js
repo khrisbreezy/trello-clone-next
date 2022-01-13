@@ -118,11 +118,25 @@ const Home = () => {
     };
 
     const exportDataHandler = async () => {
-        if (!loggedIn) {
-            $('#authModal').modal('show');
-            return;
-        }
-        await sendDataToDatase();
+        // if (!loggedIn) {
+        //     $('#authModal').modal('show');
+        //     return;
+        // }
+        let dataToExport = [];
+        phaseData.forEach(phase => {
+            phase.cards.forEach(card => {
+                dataToExport.push({
+                    'phase': phase.title,
+                    'action': card.title,
+                    'responsible': card.description
+                });
+            })
+        });
+
+        await setCsvData(dataToExport);
+        btnRef.current.link.click();
+        dispatch(savePhaseData([]));
+        // await sendDataToDatase();
     };
 
     const loginHandler = () => {
@@ -141,10 +155,10 @@ const Home = () => {
                 <div className="row">
                     <div className="col-12 text-center d-flex align-items-center justify-content-center">
                         <input className='mapName_input mx-3' type="text" value={mapName} onChange={mapNameHandler} />
-                        {!loggedIn ? 
+                        {/* {!loggedIn ? 
                         <button onClick={loginHandler} className='btn btn-login'>Login</button>
                         :
-                        <button onClick={loginOutHandler} className='btn btn-login'>Logout</button>}
+                        <button onClick={loginOutHandler} className='btn btn-login'>Logout</button>} */}
                     </div>
                 </div>
 
