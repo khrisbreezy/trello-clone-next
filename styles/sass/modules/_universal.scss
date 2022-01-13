@@ -4,6 +4,8 @@
 }
 
 .react-trello-card {
+    max-width: 230px !important;
+
     @media only screen and (max-width: $mobile_width) {
         max-width: 220px;
     }
@@ -71,7 +73,7 @@ section.react-trello-lane {
 }
 
 form.auth-form {
-    input {
+    textarea {
         outline: none;
         border: 1px solid #007DA5;
         padding: 5px;
@@ -87,6 +89,16 @@ form.auth-form {
     color: #000;
     text-decoration: underline;
     font-size: 20px;
+
+    &:hover {
+        color: #000;
+    }
+}
+
+.react-trello-card{
+    .sc-bBHxTw {
+        pointer-events: none;
+    }
 }
 
 

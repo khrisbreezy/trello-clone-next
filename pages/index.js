@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import { savePhaseData } from '../store/actions/phaseStore';
 import { logout } from '../store/actions/auth';
 import axiosInstance from '../config/axios';
+import SingleActionCard from "../components/SingleActionCard";
 
 
 const Home = () => {
@@ -26,6 +27,9 @@ const Home = () => {
     const [ mapName, setMapName ] = useState('Map Name');
     const [phaseData, setPhaseData] = useState(thePhaseData);
     const [csvData, setCsvData] = useState([]);
+    const [currentCard, setCurrentCard] = useState(null);
+    const [currentPhase, setCurrentPhase] = useState([]);
+    const [phaseIndex, setPhaseIndex] = useState(null);
 
     const TEXTS = {
         "Add another lane": "+ Add Phase",  
@@ -40,7 +44,7 @@ const Home = () => {
         "placeholder": {
           "title": "action",
           "description": "responsible",
-          "label": "label"
+          "label": "output"
         }
     };
 
@@ -69,7 +73,23 @@ const Home = () => {
         dispatch(savePhaseData([]));
     };
 
+    const cardClickHandler = (cardId, metadata, laneId) => {
+        const currentPhase = phaseData.filter((phase) => phase.id === laneId);
+        const currentCard = currentPhase[0].cards.find((card) => card.id === cardId);
+        const currentPhaseIndex = phaseData.findIndex(phase => phase.id === laneId);
+        // const currentCardIndex = currentPhase[0].cards.findIndex(card => card.id === cardId);
+
+        setCurrentCard(currentCard);
+        setCurrentPhase(currentPhase);
+        setPhaseIndex(currentPhaseIndex);
+
+        $('#actionModal').modal('show');
+
+        console.log({currentPhase});
+    }
+
     const gotoProcessBginfoHandler = () => {
+        
         dispatch(savePhaseData(phaseData));
         Router.push('/process-background-information');
     };
@@ -146,7 +166,17 @@ const Home = () => {
     const loginOutHandler = () => {
         dispatch(logout());
         NotificationManager.success('Logout successfully', '', 5000);
-    }
+    };
+
+    const resetDataAfterUpdate = () => {
+        setCurrentCard(null);
+        setCurrentPhase([]);
+        setPhaseIndex(null);
+    };
+
+    const storeEdittedDataToState = (data) => {
+        setPhaseData(data);
+    };
   
 
     return (
@@ -164,9 +194,13 @@ const Home = () => {
 
                 <div className="row">
                    <Board data={data}
-                    editable editLaneTitle
-                    canAddLanes onDataChange={dataChange}
+                    editLaneTitle
+                    editable
+                    canAddLanes={true}
+                    onDataChange={dataChange}
                     t={createTranslate(TEXTS)}
+                    onCardClick={cardClickHandler}
+                    laneDraggable
                     /> 
                 </div>
 
@@ -180,6 +214,14 @@ const Home = () => {
                     </div>         
                 </div>
             </div>
+            <SingleActionCard 
+            currentCard={currentCard} 
+            currentPhase={currentPhase}
+            phaseData={phaseData}
+            phaseIndex={phaseIndex}
+            resetDataAfterUpdate={resetDataAfterUpdate}
+            storeEdittedDataToState={storeEdittedDataToState}
+           />
         </section>
     )
   

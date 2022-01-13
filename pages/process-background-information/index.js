@@ -69,7 +69,7 @@ const ProcessBackgroundInformation = () => {
                                             <p className='thead bg-green pl-3'>Title</p>        
                                         </div>
                                         <div className="col-md-7 pl-sm-2">
-                                            <textarea ref={register()} className='input-field' name="title" id="" cols="30" rows="3" placeholder='User inputs'></textarea>
+                                            <textarea ref={register()} className='input-field' name="title" id="" cols="30" rows="3" placeholder='User inputs'/>
                                             {/* <input ref={register()} className='input-field' type="text" name="title" placeholder='User inputs' /> */}
                                         </div>
                                         <div className="col-md-3 pr-sm-0 mt-2">
@@ -83,42 +83,42 @@ const ProcessBackgroundInformation = () => {
                                             <p className='thead bg-green pl-3'>Purpose</p>        
                                         </div>
                                         <div className="col-md-7 pl-sm-2 mt-2">
-                                            <textarea ref={register()} className='input-field' name="purpose" id="" cols="30" rows="3" placeholder='User inputs'></textarea>
+                                            <textarea ref={register()} className='input-field' name="purpose" id="" cols="30" rows="3" placeholder='User inputs'/>
                                             {/* <input ref={register()} className='input-field' type="text" name="purpose" placeholder='User inputs' /> */}
                                         </div>
                                         <div className="col-md-3 pr-sm-0 mt-2">
                                             <p className='thead bg-green pl-3'>Scope</p>        
                                         </div>
                                         <div className="col-md-7 pl-sm-2 mt-2">
-                                            <textarea ref={register()} className='input-field' name="scope" id="" cols="30" rows="3" placeholder='User inputs'></textarea>
+                                            <textarea ref={register()} className='input-field' name="scope" id="" cols="30" rows="3" placeholder='User inputs'/>
                                             {/* <input ref={register()} className='input-field' type="text" name="scope" placeholder='User inputs' /> */}
                                         </div>
                                         <div className="col-md-3 pr-sm-0 mt-2">
                                             <p className='thead bg-green pl-3'>Accountability</p>        
                                         </div>
                                         <div className="col-md-7 pl-sm-2 mt-2">
-                                            <textarea ref={register()} className='input-field' name="accountability" id="" cols="30" rows="3" placeholder='User inputs'></textarea>
+                                            <textarea ref={register()} className='input-field' name="accountability" id="" cols="30" rows="3" placeholder='User inputs'/>
                                             {/* <input ref={register()} className='input-field' type="text" name="accountability" placeholder='User inputs' /> */}
                                         </div>
                                         <div className="col-md-3 pr-sm-0 mt-2">
                                             <p className='thead bg-green pl-3'>Responsibility</p>        
                                         </div>
                                         <div className="col-md-7 pl-sm-2 mt-2">
-                                            <textarea ref={register()} className='input-field' name="responsibility" id="" cols="30" rows="3" placeholder='User inputs'></textarea>
+                                            <textarea ref={register()} className='input-field' name="responsibility" id="" cols="30" rows="3" placeholder='User inputs'/>
                                             {/* <input ref={register()} className='input-field' type="text" name="responsibility" placeholder='User inputs' /> */}
                                         </div>
                                         <div className="col-md-3 pr-sm-0 mt-2">
                                             <p className='thead bg-green pl-3'>References</p>        
                                         </div>
                                         <div className="col-md-7 pl-sm-2 mt-2">
-                                            <textarea ref={register()} className='input-field' name="references" id="" cols="30" rows="3" placeholder='User inputs'></textarea>
+                                            <textarea ref={register()} className='input-field' name="references" id="" cols="30" rows="3" placeholder='User inputs'/>
                                             {/* <input ref={register()} className='input-field' type="text" name="references" placeholder='User inputs' /> */}
                                         </div>
                                         <div className="col-md-3 pr-sm-0 mt-2">
                                             <p className='thead bg-green pl-3'>Definitions</p>        
                                         </div>
                                         <div className="col-md-7 pl-sm-2 mt-2">
-                                            <textarea ref={register()} className='input-field' name="definitions" id="" cols="30" rows="3" placeholder='User inputs'></textarea>
+                                            <textarea ref={register()} className='input-field' name="definitions" id="" cols="30" rows="3" placeholder='User inputs'/>
                                             {/* <input ref={register()} className='input-field' type="text" name="definitions" placeholder='User inputs' /> */}
                                         </div>
                                     </div>
