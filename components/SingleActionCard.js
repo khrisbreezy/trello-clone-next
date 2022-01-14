@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-
-import Error from './Error';
 
 const AuthModal = ({currentCard, currentPhase, phaseData, phaseIndex, resetDataAfterUpdate, storeEdittedDataToState}) => {
-    const { handleSubmit, errors, register, reset, setValue } = useForm();
-    const [ loading, setLoading ] = useState(false);
-
-
-    const dispatch = useDispatch();
-    // console.log({phaseIndex});
+    const { handleSubmit, register, reset, setValue } = useForm();
 
     useEffect(() => {
+        // Check if the current card/action was selected and has data
         if (currentCard && currentCard.title) {
             setValue('action', currentCard.title);
         } else {
@@ -38,6 +31,7 @@ const AuthModal = ({currentCard, currentPhase, phaseData, phaseIndex, resetDataA
         } 
     }, [currentCard]);
 
+    // Function to save current card/action 
     const saveCurrentUpdatedCard = (currentCard) => {
         const currentCardIndex = currentPhase[0].cards.findIndex(card => card.id === currentCard.id);
 
@@ -49,6 +43,7 @@ const AuthModal = ({currentCard, currentPhase, phaseData, phaseIndex, resetDataA
         storeEdittedDataToState(phaseData);
     };
 
+    // Funtion to save and update the edited action/card
     const editActionHandler = async (data) => {
         currentCard['description'] = data.responsible;
         currentCard['title'] = data.action;
@@ -59,6 +54,7 @@ const AuthModal = ({currentCard, currentPhase, phaseData, phaseIndex, resetDataA
         resetDataAfterUpdate();
 
         $('#actionModal').modal('hide');
+        reset({});
     };
 
     return (
@@ -92,13 +88,6 @@ const AuthModal = ({currentCard, currentPhase, phaseData, phaseIndex, resetDataA
                                                         ref={register()}
                                                         cols="30" rows="3"
                                                         />
-                                                        {/* <input type="text"
-                                                            name="action"
-                                                            placeholder="Action"
-                                                            className="w-100"
-                                                            ref={register({ required: 'This field is required' })} /> */}
-                                                            
-                                                        {errors.action && <Error>{errors.action.message}</Error>}
                                                     </div>
                                                     <div className="col-md-6 mb-4">
                                                         <textarea 
@@ -108,12 +97,6 @@ const AuthModal = ({currentCard, currentPhase, phaseData, phaseIndex, resetDataA
                                                         ref={register()}
                                                         cols="30" rows="3"
                                                         />
-                                                        {/* <input type="text"
-                                                            name="responsible"
-                                                            placeholder="Responsible"
-                                                            className="w-100"
-                                                            ref={register({ required: 'This field is required' })} /> */}
-                                                        {errors.responsible && <Error>{errors.responsible.message}</Error>}
                                                     </div>
                                                     <div className="col-md-6 mb-4">
                                                         <textarea 
@@ -123,12 +106,6 @@ const AuthModal = ({currentCard, currentPhase, phaseData, phaseIndex, resetDataA
                                                         ref={register()}
                                                         cols="30" rows="3"
                                                         />
-                                                        {/* <input type="text"
-                                                            name="output"
-                                                            placeholder="Output"
-                                                            className="w-100"
-                                                            ref={register({ required: 'This field is required' })} /> */}
-                                                        {errors.output && <Error>{errors.output.message}</Error>}
                                                     </div>
                                                     <div className="col-md-6 mb-4">
                                                         <textarea 
@@ -138,18 +115,12 @@ const AuthModal = ({currentCard, currentPhase, phaseData, phaseIndex, resetDataA
                                                         ref={register()}
                                                         cols="30" rows="3"
                                                         />
-                                                        {/* <input type="text"
-                                                            name="notes"
-                                                            placeholder="Notes"
-                                                            className="w-100"
-                                                            ref={register({ required: 'This field is required' })} /> */}
-                                                        {errors.notes && <Error>{errors.notes.message}</Error>}
                                                     </div>
                                                 </div>
 
                                                 <div className="text-center">
-                                                        <button disabled={loading} type="submit" className="btn btn-login">
-                                                            {!loading ? 'Update' : 'Updating...'}
+                                                        <button type="submit" className="btn btn-login">
+                                                            Update
                                                         </button>
                                                 </div>
                                             </form>

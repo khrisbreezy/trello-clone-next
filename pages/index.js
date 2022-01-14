@@ -4,25 +4,16 @@ import Board, { createTranslate } from 'react-trello';
 import Router from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 import { CSVLink } from 'react-csv';
-import {NotificationManager} from 'react-notifications';
-import Cookies from 'js-cookie';
 
 import { savePhaseData } from '../store/actions/phaseStore';
-import { logout } from '../store/actions/auth';
-import axiosInstance from '../config/axios';
 import SingleActionCard from "../components/SingleActionCard";
 
 
 const Home = () => {
-
     const dispatch = useDispatch();
     const btnRef = useRef();
 
     const thePhaseData = useSelector(state => state.phaseData.phases);
-    const loggedIn = useSelector(state => state.auth.loggedIn);
-    let user = Cookies.get('user') || null;
-    user = typeof user === 'object' ? user : JSON.parse(user);
-    const token = Cookies.get('token');
 
     const [ mapName, setMapName ] = useState('Map Name');
     const [phaseData, setPhaseData] = useState(thePhaseData);
@@ -31,6 +22,11 @@ const Home = () => {
     const [currentPhase, setCurrentPhase] = useState([]);
     const [phaseIndex, setPhaseIndex] = useState(null);
 
+    // All phases data object
+    const data = {
+        lanes: phaseData
+    };
+    
     const TEXTS = {
         "Add another lane": "+ Add Phase",  
         "Click to add card": "Add actions",
@@ -48,24 +44,25 @@ const Home = () => {
         }
     };
 
+    // set export name
     const mapNameHandler = (e) => {
         setMapName(e.target.value);
     };
 
+    // Headers for csv export
     const headers = [
         {label: 'Phase', key: 'phase'},
         {label: 'Action', key: 'action'},
-        {label: 'Responsible', key: 'responsible'}
+        {label: 'Responsible', key: 'responsible'},
+        {label: 'Output', key: 'output'},
+        {label: 'Notes', key: 'notes'}
     ];
 
+    // Csv export object
     const csvReport = {
         filename: mapName.split(' ').join('-') + '.csv',
         headers: headers,
         data: csvData
-    };
-
-    const data = {
-        lanes: phaseData
     };
 
     const dataChange = (data) => {
@@ -73,11 +70,11 @@ const Home = () => {
         dispatch(savePhaseData([]));
     };
 
+    // Funtion to open single action modal for edit (its important to pass the args => cardId, metadata and laneId)
     const cardClickHandler = (cardId, metadata, laneId) => {
         const currentPhase = phaseData.filter((phase) => phase.id === laneId);
         const currentCard = currentPhase[0].cards.find((card) => card.id === cardId);
         const currentPhaseIndex = phaseData.findIndex(phase => phase.id === laneId);
-        // const currentCardIndex = currentPhase[0].cards.findIndex(card => card.id === cardId);
 
         setCurrentCard(currentCard);
         setCurrentPhase(currentPhase);
@@ -85,95 +82,43 @@ const Home = () => {
 
         $('#actionModal').modal('show');
 
-        console.log({currentPhase});
-    }
+    };
 
+    // Function to goto process background information page
     const gotoProcessBginfoHandler = () => {
-        
         dispatch(savePhaseData(phaseData));
         Router.push('/process-background-information');
     };
 
-    const sendDataToDatase = async () => {
-        let phase = [];
-        data.lanes.map((lane => { 
-            phase.push({
-                'title': lane.title,
-                'card': lane.cards.map((card) => ({
-                    'action': card.title,
-                    'responsibility': card.description
-                }))
-            });
-            
-            console.log({phase});
-        }))
-        try {
-            const { data } = await axiosInstance.post('processes', {
-                process_name: mapName, 
-                user_id: user.id,
-                phase: phase
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
-            console.log({data});
-            let dataToExport = [];
-            phaseData.forEach(phase => {
-                phase.cards.forEach(card => {
-                    dataToExport.push({
-                        'phase': phase.title,
-                        'action': card.title,
-                        'responsible': card.description
-                    });
-                })
-            });
-
-            await setCsvData(dataToExport);
-            btnRef.current.link.click();
-            dispatch(savePhaseData([]));
-        } catch(e) {
-            console.log(e);
-        }
-    };
-
+    // Export data function
     const exportDataHandler = async () => {
-        // if (!loggedIn) {
-        //     $('#authModal').modal('show');
-        //     return;
-        // }
         let dataToExport = [];
         phaseData.forEach(phase => {
             phase.cards.forEach(card => {
                 dataToExport.push({
                     'phase': phase.title,
                     'action': card.title,
-                    'responsible': card.description
+                    'responsible': card.description,
+                    'output': card.label ? card.label : '',
+                    'notes': card.metadata ? card.metadata : ''
                 });
             })
         });
 
         await setCsvData(dataToExport);
         btnRef.current.link.click();
+        setPhaseData([]);
         dispatch(savePhaseData([]));
-        // await sendDataToDatase();
     };
 
-    const loginHandler = () => {
-        $('#authModal').modal('show');
-    };
-
-    const loginOutHandler = () => {
-        dispatch(logout());
-        NotificationManager.success('Logout successfully', '', 5000);
-    };
-
+    // Function to reset current Action card after an update/change
     const resetDataAfterUpdate = () => {
         setCurrentCard(null);
         setCurrentPhase([]);
         setPhaseIndex(null);
     };
 
+    // Function to store edited data to state
     const storeEdittedDataToState = (data) => {
         setPhaseData(data);
     };
@@ -185,10 +130,6 @@ const Home = () => {
                 <div className="row">
                     <div className="col-12 text-center d-flex align-items-center justify-content-center">
                         <input className='mapName_input mx-3' type="text" value={mapName} onChange={mapNameHandler} />
-                        {/* {!loggedIn ? 
-                        <button onClick={loginHandler} className='btn btn-login'>Login</button>
-                        :
-                        <button onClick={loginOutHandler} className='btn btn-login'>Logout</button>} */}
                     </div>
                 </div>
 
@@ -214,6 +155,7 @@ const Home = () => {
                     </div>         
                 </div>
             </div>
+            {/* Single Action Modal and its properties */}
             <SingleActionCard 
             currentCard={currentCard} 
             currentPhase={currentPhase}

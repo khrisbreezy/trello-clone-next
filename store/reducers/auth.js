@@ -1,4 +1,4 @@
-import { LOGIN, LOGOUT, SYNCCOOKIES } from '../actions/auth';
+import { LOGIN, LOGOUT } from '../actions/auth';
 
 import Cookies from 'js-cookie';
 
@@ -19,14 +19,6 @@ const auth = (state = initialState, action) => {
                 user,
                 token,
                 loggedIn: true
-            }
-        case SYNCCOOKIES:
-            const {user: userData, token: userToken, loggedIn} = action.data;
-            return {
-                ...state,
-                user: userData,
-                token: userToken,
-                loggedIn
             }
         case LOGOUT:
             return {

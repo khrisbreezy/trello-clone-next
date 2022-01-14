@@ -6,7 +6,6 @@ import axiosInstance from '../../config/axios';
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
-export const SYNCCOOKIES = 'SYNCCOOKIES';
 
 
 export const loginAsync = (data) => {
@@ -32,8 +31,6 @@ export const storeAuth = data => {
         data
     }
 };
-
-export const syncCookiesToStore = data => ({type: SYNCCOOKIES, data});
 
 
 export const logout = () => {
